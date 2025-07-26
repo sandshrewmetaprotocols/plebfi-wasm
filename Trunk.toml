@@ -1,5 +1,5 @@
 [build]
-public_url = "/"
+public_url = "/plebfi-wasm/"
 
 [serve]
 address = "0.0.0.0"
