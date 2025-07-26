@@ -664,6 +664,44 @@ const METASHREW_RUNTIME_CONFIG_URL: &str = "https://github.com/sandshrewmetaprot
 const METASHREW_RUNTIME_LINKING_URL: &str = "https://github.com/sandshrewmetaprotocols/metashrew/blob/main/crates/metashrew-runtime/src/runtime.rs#L1556";
 const ALKANES_SANDBOX_HOST_URL: &str = "https://github.com/altinakseven/alkanes-sandbox/blob/main/src.ts/index.ts";
 
+const DEEZEL_OUTPUT: &str = r#"$ RUST_LOG=info ./reference/deezel/target/release/deezel alkanes inspect 2:0 --fuzz --fuzz-ranges 0-100
+[2025-07-26T17:11:55Z INFO  deezel::alkanes::inspector] Inspecting alkane 2:0
+[2025-07-26T17:11:55Z INFO  deezel::alkanes::inspector] Fetching bytecode for alkane 2:0
+[2025-07-26T17:11:55Z INFO  deezel::alkanes::inspector] Received bytecode hex (first 100 chars): 0x0061736d0100000001ab011860027f7f0060027f7f017f60017f0060037f7f7f017f60017f017f6000017f60047f7f7f7f
+[2025-07-26T17:11:55Z INFO  deezel::alkanes::inspector] Total bytecode length: 460728 characters
+[2025-07-26T17:11:55Z INFO  deezel::alkanes::inspector] Decoded bytecode length: 230363 bytes
+[2025-07-26T17:11:55Z INFO  deezel::alkanes::inspector] WASM bytecode saved to: /home/ubuntu/.deezel/alkane_2_0.wasm
+[2025-07-26T17:11:55Z INFO  deezel::alkanes::inspector] Performing fuzzing analysis for alkane 2:0
+=== FUZZING ANALYSIS ===
+Alkane: 2:0
+WASM size: 230363 bytes
+
+Testing 101 opcodes...
+
+=== FUZZING RESULTS ===
+📊 Total opcodes tested: 101
+✅ Successful executions: 101
+❌ Failed executions: 0
+🎯 Implemented opcodes: 101 total
+
+🔍 Implemented Opcodes:
+   📋 Opcodes: 0-100
+
+📊 Detailed Results for Implemented Opcodes:
+   ✅ Opcode 0: return=Some(1114124), time=35.848µs
+      📦 Data: Hex: 6661696c656420746f2066696c6c2077686f6c6520627566666572 | UTF-8: "failed to fill whole buffer"
+      ⚠️  Error: failed to fill whole buffer
+   ✅ Opcode 77: return=Some(1114124), time=45.366µs
+      📦 Data: Hex: 6661696c656420746f2066696c6c2077686f6c6520627566666572 | UTF-8: "failed to fill whole buffer"
+      ⚠️  Error: failed to fill whole buffer
+   ✅ Opcode 99: return=Some(1114124), time=40.447µs
+      📦 Data: Hex: 0000000044494553454c | UTF-8: "DIESEL"
+   ✅ Opcode 100: return=Some(1114124), time=39.715µs
+      📦 Data: Hex: 0000000044494553454c | UTF-8: "DIESEL"
+...
+"#;
+
+const DEEZEL_INSPECTOR_SOURCE: &str = include_str!("../reference/deezel/src/alkanes/inspector.rs");
 
 #[wasm_bindgen]
 extern "C" {
@@ -679,7 +717,6 @@ fn CodeBlock(
     lang: &'static str,
     is_active: Signal<bool>,
     #[prop(optional)] url: Option<&'static str>,
-    #[prop(optional)] line: Option<usize>,
 ) -> impl IntoView {
     let pre_ref = create_node_ref::<html::Pre>();
     create_effect(move |_| {
@@ -691,11 +728,11 @@ fn CodeBlock(
     view! {
         <div class="code-block-container">
             <pre node_ref=pre_ref><code class=format!("language-{}", lang)>{code}</code></pre>
-            {if let (Some(url), Some(line)) = (url, line) {
+            {if let Some(url) = url {
                 view! {
                     <div class="code-block-footer">
                         <hr />
-                        <a href=format!("{}{}{}", url, "#L", line) target="_blank">{format!("source: {}#L{}", url, line)}</a>
+                        <a href=url target="_blank">{url}</a>
                     </div>
                 }
                 .into_view()
@@ -707,8 +744,7 @@ fn CodeBlock(
 }
 
 #[component]
-fn Terminal(is_active: Signal<bool>, lines: Vec<&'static str>) -> impl IntoView {
-    let id = format!("terminal-{}", rand::random::<u32>());
+fn Terminal(is_active: Signal<bool>, lines: Vec<&'static str>, id: String) -> impl IntoView {
     create_effect({
         let id = id.clone();
         move |_| {
@@ -720,7 +756,7 @@ fn Terminal(is_active: Signal<bool>, lines: Vec<&'static str>) -> impl IntoView 
     });
 
     view! {
-        <div class="terminal" id=id.clone()>
+        <div class="terminal" id=id>
         </div>
     }
 }
@@ -777,7 +813,7 @@ fn App() -> impl IntoView {
         Box::new(|is_active| view! {
             <>
                 <h2>Alkanes Host Functions</h2>
-                <CodeBlock code=ALKANES_HOST_FUNCTIONS lang="rust" is_active=is_active.into() url=ALKANES_HOST_FUNCTIONS_URL line=9/>
+                <CodeBlock code=ALKANES_HOST_FUNCTIONS lang="rust" is_active=is_active.into() url=ALKANES_HOST_FUNCTIONS_URL/>
             </>
         }.into_view()),
         Box::new(|_is_active| view! {
@@ -803,17 +839,10 @@ fn App() -> impl IntoView {
         Box::new(|is_active| view! {
             <>
                 <h2>alkanes-rs: Cargo.toml</h2>
-                <CodeBlock code=ALKANES_CARGO_TOML lang="toml" is_active=is_active.into() url=ALKANES_CARGO_TOML_URL line=2/>
+                <CodeBlock code=ALKANES_CARGO_TOML lang="toml" is_active=is_active.into() url=ALKANES_CARGO_TOML_URL/>
             </>
         }.into_view()),
         Box::new(|is_active| view! {
-            <>
-                <h2>alkanes-rs: .cargo/config.toml</h2>
-                <p>"This file configures the test runner for the <code>wasm32-unknown-unknown</code> target."</p>
-                <CodeBlock code=CARGO_CONFIG_TOML lang="toml" is_active=is_active.into() url=ALKANES_CARGO_CONFIG_URL line=1/>
-            </>
-        }.into_view()),
-        Box::new(|_is_active| view! {
             <>
                 <h2>Running WASM Tests</h2>
                 <ul>
@@ -821,30 +850,32 @@ fn App() -> impl IntoView {
                     <li><span inner_html="It requires the <code>wasm-bindgen-cli</code> tool to be installed."></span></li>
                     <li><span inner_html="Install it with: <code>cargo install wasm-bindgen-cli</code>"></span></li>
                 </ul>
+                <p>"This file configures the test runner for the <code>wasm32-unknown-unknown</code> target."</p>
+                <CodeBlock code=CARGO_CONFIG_TOML lang="toml" is_active=is_active.into() url=ALKANES_CARGO_CONFIG_URL/>
             </>
         }.into_view()),
         Box::new(|is_active| view! {
             <>
                 <h2>Metashrew Core: Imports</h2>
-                <CodeBlock code=METASHREW_CORE_IMPORTS lang="rust" is_active=is_active.into() url=METASHREW_CORE_IMPORTS_URL line=19/>
+                <CodeBlock code=METASHREW_CORE_IMPORTS lang="rust" is_active=is_active.into() url=METASHREW_CORE_IMPORTS_URL/>
             </>
         }.into_view()),
         Box::new(|is_active| view! {
             <>
                 <h2>Metashrew Runtime: Deterministic Config</h2>
-                <CodeBlock code=METASHREW_RUNTIME_CONFIG lang="rust" is_active=is_active.into() url=METASHREW_RUNTIME_CONFIG_URL line=426/>
+                <CodeBlock code=METASHREW_RUNTIME_CONFIG lang="rust" is_active=is_active.into() url=METASHREW_RUNTIME_CONFIG_URL/>
             </>
         }.into_view()),
         Box::new(|is_active| view! {
             <>
                 <h2>Metashrew Runtime: Linking Host Functions</h2>
-                <CodeBlock code=METASHREW_RUNTIME_LINKING lang="rust" is_active=is_active.into() url=METASHREW_RUNTIME_LINKING_URL line=1556/>
+                <CodeBlock code=METASHREW_RUNTIME_LINKING lang="rust" is_active=is_active.into() url=METASHREW_RUNTIME_LINKING_URL/>
             </>
         }.into_view()),
         Box::new(|is_active| view! {
             <>
                 <h2>Alkanes Sandbox: TS Host</h2>
-                <CodeBlock code=ALKANES_SANDBOX_HOST lang="typescript" is_active=is_active.into() url=ALKANES_SANDBOX_HOST_URL line=1/>
+                <CodeBlock code=ALKANES_SANDBOX_HOST lang="typescript" is_active=is_active.into() url=ALKANES_SANDBOX_HOST_URL/>
             </>
         }.into_view()),
         Box::new(|is_active| view! {
@@ -856,13 +887,33 @@ fn App() -> impl IntoView {
         Box::new(|is_active| view! {
             <>
                 <h2>Alkanes Inspector</h2>
-                <Terminal is_active=is_active.into() lines=vec![
-                    "$ ./reference/deezel/target/release/deezel -p mainnet alkanes inspect 2:0 --fuzz --fuzz-ranges 0-100",
-                    "   Compiling deezel v0.1.0 (/data/plebfi.github.io/reference/deezel)",
-                    "    Finished release [optimized] target(s) in 0.01s",
-                    "     Running `target/release/deezel -p mainnet alkanes inspect 2:0 --fuzz --fuzz-ranges 0-100`",
-                    "Found 2 implemented opcodes: [0, 77]",
-                ]/>
+                <Terminal is_active=is_active.into() lines={DEEZEL_OUTPUT.lines().collect::<Vec<_>>()} id={format!("terminal-{}", rand::random::<u32>())}/>
+            </>
+        }.into_view()),
+        Box::new(|is_active| view! {
+            <>
+                <h2>Deezel Inspector Source</h2>
+                <CodeBlock code=DEEZEL_INSPECTOR_SOURCE lang="rust" is_active=is_active.into()/>
+            </>
+        }.into_view()),
+        Box::new(|_is_active| view! {
+            <>
+                <h2>Thank You!</h2>
+                <p>"Get in touch:"</p>
+                <div style="display: flex; justify-content: center; gap: 2rem; align-items: center;">
+                    <a href="https://x.com/judoflexchop" target="_blank" style="display: flex; align-items: center; gap: 0.5rem;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-twitter-x" viewBox="0 0 16 16">
+                            <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.6.75zm-1.8 13.05h1.96l-7.2-8.19H5.13z"/>
+                        </svg>
+                        <span>@judoflexchop</span>
+                    </a>
+                    <a href="https://t.me/kungfuflex" target="_blank" style="display: flex; align-items: center; gap: 0.5rem;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-telegram" viewBox="0 0 16 16">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.287 5.906q-1.168.486-4.42 2.09c-.789.333-1.116.554-1.116.895 0 .25.317.438.885.634l1.16.318 1.834 5.879q.21.645.753.645c.621 0 .755-.448.994-1.551a1.56 1.56 0 0 0 .288-.907c.083-.92.184-1.83.27-2.65.08-.745.157-1.488.24-2.23.082-.76.174-1.543.27-2.355q.095-.81.23-1.5c.03-.17.07-.339.13-.515.07-.2.15-.345.27-.455.12-.11.25-.165.4-.165.25 0 .415.075.585.225.17.15.255.38.255.688q0 .46-.255 1.038c-.255.58-.54 1.148-.855 1.715-.315.565-.655 1.132-1.02 1.695-.365.562-.76 1.097-1.185 1.615-.425.518-.865.99-1.32 1.425q-.455.435-1.08.825c-.625.39-1.28.62-1.96.685a4.1 4.1 0 0 1-1.485.07q-1.42-.2-2.58-1.05-.16-.12-.28-.255c-.12-.135-.19-.29-.19-.465 0-.225.06-.435.18-.63.12-.195.29-.345.51-.45.22-.105.48-.21.78-.315l.735-.255q.63-.21 1.155-.405c.525-.195.985-.41 1.38-.645.395-.235.735-.495 1.02-.78.285-.285.51-.59.675-.915.165-.325.27-.69.315-1.1z"/>
+                        </svg>
+                        <span>@kungfuflex</span>
+                    </a>
+                </div>
             </>
         }.into_view()),
     ];

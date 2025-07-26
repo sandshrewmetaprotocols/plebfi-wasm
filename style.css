@@ -1,4 +1,4 @@
-gihtml, body {
+html, body {
   height: 100%;
   margin: 0;
   padding: 0;
@@ -38,9 +38,6 @@ main {
   border-radius: 15px;
   backdrop-filter: blur(10px);
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-  margin: 2rem;
-  width: calc(100% - 4rem);
-  height: calc(100% - 4rem);
   z-index: 1;
 }
 

@@ -5,7 +5,7 @@ function autoScroll(element) {
 
   element.scrollTop = 0;
   let scrollDelay = 3000; // 3 second delay before starting
-  const pixelsPerSecond = 25;
+  const pixelsPerSecond = 12.5;
   let scrollDirection = 1; // 1 for down, -1 for up
   let hasScrolledDown = false;
   let isPaused = false;

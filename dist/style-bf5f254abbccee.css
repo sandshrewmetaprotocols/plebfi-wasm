@@ -38,9 +38,6 @@ main {
   border-radius: 15px;
   backdrop-filter: blur(10px);
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-  margin: 2rem;
-  width: calc(100% - 4rem);
-  height: calc(100% - 4rem);
   z-index: 1;
 }
 
@@ -251,4 +248,16 @@ blockquote {
   padding-left: 1rem;
   margin-left: 0;
   color: #666;
+}
+
+.terminal {
+    background-color: #282c34;
+    border-radius: 4px;
+    padding: 1rem;
+    width: 80%;
+    margin: 1rem auto;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    color: #fff;
+    text-align: left;
+    white-space: pre-wrap;
 }
