@@ -11,15 +11,15 @@
     <!-- include support for `wasm-bindgen --weak-refs` - see: https://rustwasm.github.io/docs/wasm-bindgen/reference/weak-references.html -->
     <link data-trunk rel="rust" data-wasm-opt="z" data-weak-refs />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
-    <link data-trunk rel="js" href="src/highlight.min.js" />
-    <link data-trunk rel="js" href="src/main.js" />
-    <link data-trunk rel="js" href="src/scroll.js" />
-    <link data-trunk rel="js" href="background.js" />
-    <link data-trunk rel="js" href="src/terminal.js" />
     <title>Cooking with flex 👨‍🍳</title>
   </head>
   <body>
     <canvas id="background"></canvas>
     <main></main>
+    <script data-trunk src="src/highlight.min.js"></script>
+    <script data-trunk src="src/scroll.js"></script>
+    <script data-trunk src="src/terminal.js"></script>
+    <script data-trunk src="src/main.js"></script>
+    <script data-trunk src="background.js"></script>
   </body>
 </html>
