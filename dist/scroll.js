@@ -5,7 +5,6 @@ function autoScroll(element) {
 
   element.scrollTop = 0;
   let scrollDelay = 3000; // 3 second delay before starting
-  const pixelsPerSecond = 12.5;
   let scrollDirection = 1; // 1 for down, -1 for up
   let hasScrolledDown = false;
   let isPaused = false;
@@ -14,21 +13,19 @@ function autoScroll(element) {
   let scrollTimeout;
 
   const startScrolling = () => {
-    const scrollHeight = element.scrollHeight - element.clientHeight;
-    const duration = (scrollHeight / pixelsPerSecond) * 1000;
-    const intervalTime = 20; // ms
-    const scrollStep = scrollHeight / (duration / intervalTime);
+    const scrollStep = 1;
+    const intervalTime = 120; // Slower scrolling
 
     scrollInterval = setInterval(() => {
       if (isPaused) return;
 
       if (scrollDirection === 1) {
-        if (element.scrollTop + element.clientHeight >= element.scrollHeight - 1) {
+        if (element.scrollTop + element.clientHeight >= element.scrollHeight) {
           scrollDirection = -1;
           hasScrolledDown = true;
         }
       } else {
-        if (element.scrollTop <= 1) {
+        if (element.scrollTop <= 0) {
           if (hasScrolledDown) {
             clearInterval(scrollInterval);
             return;
