@@ -6,13 +6,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/plebfi-wasm/style-bf5f254abbccee.css" integrity="sha384-RbqRmpFwqJoG9mz/0jo2wZX4mAjG/SIscxGBfNNeorOeFlEwwSSDV+sVLOXU8oEK"/>
+    <link rel="stylesheet" href="/style-bf5f254abbccee.css" integrity="sha384-RbqRmpFwqJoG9mz/0jo2wZX4mAjG/SIscxGBfNNeorOeFlEwwSSDV+sVLOXU8oEK"/>
 
     <!-- include support for `wasm-bindgen --weak-refs` - see: https://rustwasm.github.io/docs/wasm-bindgen/reference/weak-references.html -->
     
 <script type="module">
-import init, * as bindings from '/plebfi-wasm/plebfi-github-io-eb7e3efdecbb817.js';
-const wasm = await init({ module_or_path: '/plebfi-wasm/plebfi-github-io-eb7e3efdecbb817_bg.wasm' });
+import init, * as bindings from '/plebfi-github-io-eb7e3efdecbb817.js';
+const wasm = await init({ module_or_path: '/plebfi-github-io-eb7e3efdecbb817_bg.wasm' });
 
 
 window.wasmBindings = bindings;
@@ -23,14 +23,14 @@ dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
 </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <title>Cooking with flex 👨‍🍳</title>
-  <link rel="modulepreload" href="/plebfi-wasm/plebfi-github-io-eb7e3efdecbb817.js" crossorigin="anonymous" integrity="sha384-Pq5lBbWkjaQGLWqDHIRxwOQ7d0NC65doEEcYlEryWUbNyx2uW3+EvVZ/b3D1X7G3"><link rel="preload" href="/plebfi-wasm/plebfi-github-io-eb7e3efdecbb817_bg.wasm" crossorigin="anonymous" integrity="sha384-6zGajoxa8bUpB7DxQ18lF0pGKpZp68c3xZofaQsChmiuvHM2KIGp2keUiz9LBCZc" as="fetch" type="application/wasm"></head>
+  <link rel="modulepreload" href="/plebfi-github-io-eb7e3efdecbb817.js" crossorigin="anonymous" integrity="sha384-Pq5lBbWkjaQGLWqDHIRxwOQ7d0NC65doEEcYlEryWUbNyx2uW3+EvVZ/b3D1X7G3"><link rel="preload" href="/plebfi-github-io-eb7e3efdecbb817_bg.wasm" crossorigin="anonymous" integrity="sha384-6zGajoxa8bUpB7DxQ18lF0pGKpZp68c3xZofaQsChmiuvHM2KIGp2keUiz9LBCZc" as="fetch" type="application/wasm"></head>
   <body>
     <canvas id="background"></canvas>
     <main></main>
-    <script src="/plebfi-wasm/highlight.min-4af83180ebdbbddc.js" integrity="sha384-F/bZzf7p3Joyp5psL90p/p89AZJsndkSoGwRpXcZhleCWhd8SnRuoYo4d0yirjJp"></script>
-    <script src="/plebfi-wasm/scroll-80795bf57c28e3cb.js" integrity="sha384-iKIPHgTpldbeUSg6ODhDgcID78tww69vxlP7GlZ6LF3se8fts0ZNLVhcl7FYo+Qq"></script>
-    <script src="/plebfi-wasm/terminal-4ff4e3646936a85f.js" integrity="sha384-lbl5UelFcLPq3vXnPjAJf+iEhX1RD4Jkz6vHCwhgMB71ET7HbSfOQTElzvNW1osb"></script>
-    <script src="/plebfi-wasm/main-46e5a4cb1088fe02.js" integrity="sha384-m8DsIIVVd1iLcTjmtOilH6T03ZkDAsdpYZhMo4IglFxLYNMvj28Jaj7vopD4rxHr"></script>
-    <script src="/plebfi-wasm/background-bb9f95582672950b.js" integrity="sha384-3IiTvwojs2RxEw3SnHXpgbfOLg3bH+f9+vWQX4nH++hOZA5PoXcryxcd8wewzSBy"></script>
+    <script src="/highlight.min-4af83180ebdbbddc.js" integrity="sha384-F/bZzf7p3Joyp5psL90p/p89AZJsndkSoGwRpXcZhleCWhd8SnRuoYo4d0yirjJp"></script>
+    <script src="/scroll-80795bf57c28e3cb.js" integrity="sha384-iKIPHgTpldbeUSg6ODhDgcID78tww69vxlP7GlZ6LF3se8fts0ZNLVhcl7FYo+Qq"></script>
+    <script src="/terminal-4ff4e3646936a85f.js" integrity="sha384-lbl5UelFcLPq3vXnPjAJf+iEhX1RD4Jkz6vHCwhgMB71ET7HbSfOQTElzvNW1osb"></script>
+    <script src="/main-46e5a4cb1088fe02.js" integrity="sha384-m8DsIIVVd1iLcTjmtOilH6T03ZkDAsdpYZhMo4IglFxLYNMvj28Jaj7vopD4rxHr"></script>
+    <script src="/background-bb9f95582672950b.js" integrity="sha384-3IiTvwojs2RxEw3SnHXpgbfOLg3bH+f9+vWQX4nH++hOZA5PoXcryxcd8wewzSBy"></script>
   </body>
 </html>
