@@ -1,4 +1,4 @@
-gihtml, body {
+html, body {
   height: 100%;
   margin: 0;
   padding: 0;
@@ -251,16 +251,4 @@ blockquote {
   padding-left: 1rem;
   margin-left: 0;
   color: #666;
-}
-
-.terminal {
-    background-color: #282c34;
-    border-radius: 4px;
-    padding: 1rem;
-    width: 80%;
-    margin: 1rem auto;
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
-    color: #fff;
-    text-align: left;
-    white-space: pre-wrap;
 }

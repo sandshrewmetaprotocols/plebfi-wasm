@@ -3,12 +3,28 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link data-trunk rel="css" rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link data-trunk rel="css" href="style.css" />
 
     <!-- include support for `wasm-bindgen --weak-refs` - see: https://rustwasm.github.io/docs/wasm-bindgen/reference/weak-references.html -->
     <link data-trunk rel="rust" data-wasm-opt="z" data-weak-refs />
-
-    <title>Leptos Example</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <link data-trunk rel="copy-file" href="src/highlight.min.js" />
+    <link data-trunk rel="copy-file" href="src/main.js" />
+    <link data-trunk rel="copy-file" href="src/scroll.js" />
+    <link data-trunk rel="copy-file" href="background.js" />
+    <link data-trunk rel="copy-file" href="src/terminal.js" />
+    <title>Cooking with flex 👨‍🍳</title>
   </head>
-  <body></body>
+  <body>
+    <canvas id="background"></canvas>
+    <main></main>
+    <script src="/highlight.min.js"></script>
+    <script src="/scroll.js"></script>
+    <script src="/terminal.js"></script>
+    <script src="/main.js"></script>
+    <script src="/background.js"></script>
+  </body>
 </html>
