@@ -937,48 +937,41 @@ fn App() -> impl IntoView {
     });
 
     view! {
-        <div class="slideshow">
-            {slides
-                .into_iter()
-                .enumerate()
-                .map(|(i, slide_fn)| {
-                    let is_active = create_memo(move |_| i == current_slide.get());
-                    view! {
-                        <Slide is_active=is_active.into()>
-                            {slide_fn(is_active.into())}
-                        </Slide>
-                    }
-                })
-                .collect_view()}
-        </div>
-        <div class="navigation-controls">
-            <button on:click=move |_| set_current_slide.update(|n| if *n > 0 { *n -= 1 })>"Prev"</button>
-            <div class="slider-container">
-                <input type="range" min="0" max={num_slides - 1} value=current_slide on:input=move |ev| {
-                    let val = event_target_value(&ev).parse::<usize>().unwrap();
-                    set_current_slide.set(val);
-                }/>
-                <div class="slider-ticks">
-                    {(0..num_slides).map(|i| view! { <span class="tick" style=format!("left: {}%", (i as f32 / (num_slides - 1) as f32) * 100.0)></span> }).collect_view()}
-                </div>
+        <>
+            <canvas id="background"></canvas>
+            <div class="slideshow">
+                {slides
+                    .into_iter()
+                    .enumerate()
+                    .map(|(i, slide_fn)| {
+                        let is_active = create_memo(move |_| i == current_slide.get());
+                        view! {
+                            <Slide is_active=is_active.into()>
+                                {slide_fn(is_active.into())}
+                            </Slide>
+                        }
+                    })
+                    .collect_view()}
             </div>
-            <button on:click=move |_| set_current_slide.update(|n| if *n < num_slides - 1 { *n += 1 })>"Next"</button>
-        </div>
+            <div class="navigation-controls">
+                <button on:click=move |_| set_current_slide.update(|n| if *n > 0 { *n -= 1 })>"Prev"</button>
+                <div class="slider-container">
+                    <input type="range" min="0" max={num_slides - 1} value=current_slide on:input=move |ev| {
+                        let val = event_target_value(&ev).parse::<usize>().unwrap();
+                        set_current_slide.set(val);
+                    }/>
+                    <div class="slider-ticks">
+                        {(0..num_slides).map(|i| view! { <span class="tick" style=format!("left: {}%", (i as f32 / (num_slides - 1) as f32) * 100.0)></span> }).collect_view()}
+                    </div>
+                </div>
+                <button on:click=move |_| set_current_slide.update(|n| if *n < num_slides - 1 { *n += 1 })>"Next"</button>
+            </div>
+        </>
     }
 }
 
 fn main() {
-    mount_to(
-        gloo_utils::document()
-            .query_selector("main")
-            .unwrap()
-            .unwrap()
-            .dyn_into::<web_sys::HtmlElement>()
-            .unwrap(),
-        || {
-            view! {
-                <App />
-            }
-        },
-    )
+    mount_to_body(|| {
+        view! { <App /> }
+    })
 }
