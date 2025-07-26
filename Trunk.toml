@@ -1,3 +1,6 @@
+[build]
+public_url = "/plebfi-wasm/"
+
 [serve]
 address = "0.0.0.0"
 port = 9050
